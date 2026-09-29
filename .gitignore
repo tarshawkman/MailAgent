@@ -1,0 +1,24 @@
+# Environment & Credentials
+.env
+*.env
+*.pem
+*.key
+
+# Python
+.venv/
+venv/
+ENV/
+env/
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Dynamic Uploads (keep directory structure)
+uploads/*
+!uploads/.gitkeep

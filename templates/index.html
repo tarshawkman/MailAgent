@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autonomous Research Outreach Agent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Research Outreach</h1>
+          <span class="agent-status-badge">
+            <span class="status-dot pulse"></span> Agent Active
+          </span>
+        </div>
+      </div>
+
+      <!-- MODEL SELECTOR -->
+      <div class="sidebar-section">
+        <label class="section-label" for="model-select">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          LLM Model (OpenRouter Free)
+        </label>
+        <select id="model-select" class="form-select">
+          <option value="nvidia/nemotron-3.5-lightning:free">⚡ NVIDIA: Nemotron 3.5 Lightning (Tools ✓)</option>
+          <option value="qwen/qwen3.8-27b:free">Qwen: Qwen3.8 27B (Tools ✓)</option>
+          <option value="google/gemma-4-31b-it:free">Google: Gemma 4 31B (Tools ✓)</option>
+          <option value="google/gemma-4-26b-a4b-it:free">Google: Gemma 4 26B A4B (Tools ✓)</option>
+        </select>
+      </div>
+
+      <!-- CREDENTIALS & .ENV STATUS -->
+      <div class="sidebar-section">
+        <div class="section-label-row">
+          <span class="section-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Credentials (.env)
+          </span>
+          <button id="toggle-config-btn" class="icon-text-btn" title="Edit settings">Edit</button>
+        </div>
+
+        <div id="config-status-card" class="status-card">
+          <div class="status-item" id="status-openrouter">
+            <span class="item-dot ok"></span>
+            <span class="item-name">OpenRouter API</span>
+            <span class="item-val" id="val-openrouter">Loaded</span>
+          </div>
+          <div class="status-item" id="status-sender">
+            <span class="item-dot ok"></span>
+            <span class="item-name">Sender Email</span>
+            <span class="item-val" id="val-sender">Loaded</span>
+          </div>
+          <div class="status-item" id="status-password">
+            <span class="item-dot ok"></span>
+            <span class="item-name">App Password</span>
+            <span class="item-val" id="val-password">Configured</span>
+          </div>
+          <div class="status-item" id="status-cc">
+            <span class="item-dot info"></span>
+            <span class="item-name">Friend CC</span>
+            <span class="item-val" id="val-cc">None</span>
+          </div>
+        </div>
+
+        <!-- Hidden Quick Config Editor -->
+        <div id="config-editor" class="config-editor hidden">
+          <div class="form-group">
+            <label>Friend's Email (CC'd)</label>
+            <input type="email" id="input-cc" placeholder="friend@gmail.com" class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" id="input-student-name" placeholder="Aaditya Saraf" class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Friend's Name</label>
+            <input type="text" id="input-friend-name" placeholder="Partner Name" class="form-input">
+          </div>
+          <button id="save-config-btn" class="btn btn-sm btn-primary">Save Settings</button>
+        </div>
+      </div>
+
+      <!-- RESUME ATTACHMENTS MANAGER -->
+      <div class="sidebar-section">
+        <div class="section-label-row">
+          <span class="section-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Resumes to Attach
+          </span>
+          <label for="resume-upload-input" class="upload-link-btn" title="Upload new resume">
+            + Upload
+            <input type="file" id="resume-upload-input" accept=".pdf,.doc,.docx" class="hidden">
+          </label>
+        </div>
+
+        <div id="resumes-list" class="resumes-list">
+          <div class="resume-chip">
+            <span class="resume-icon">📄</span>
+            <span class="resume-name">Aaditya_Saraf_Resume.pdf</span>
+          </div>
+          <div class="resume-chip">
+            <span class="resume-icon">📄</span>
+            <span class="resume-name">Friend_Research_CV.pdf</span>
+          </div>
+        </div>
+        <div class="resumes-hint">Both resumes will automatically be attached to cold emails.</div>
+      </div>
+
+      <!-- REGION FILTERS -->
+      <div class="sidebar-section">
+        <span class="section-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Target Regions
+        </span>
+        <div class="region-badges">
+          <span class="region-pill active" data-region="us">🇺🇸 United States</span>
+          <span class="region-pill active" data-region="singapore">🇸🇬 Singapore</span>
+          <span class="region-pill active" data-region="hong_kong">🇭🇰 Hong Kong</span>
+          <span class="region-pill" data-region="uk">🇬🇧 United Kingdom</span>
+          <span class="region-pill" data-region="canada">🇨🇦 Canada</span>
+          <span class="region-pill" data-region="europe">🇪🇺 Europe</span>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="sidebar-footer">
+        <button id="clear-chat-btn" class="btn btn-secondary btn-block">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          Clear Conversation
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CHAT VIEW -->
+    <main class="chat-container">
+      <!-- TOP NAV -->
+      <header class="chat-header">
+        <div class="header-info">
+          <h2>Autonomous Research Discovery & Cold Outreach</h2>
+          <p class="header-sub">Search faculty worldwide • Auto-scrape emails • Create & send interactive cold email drafts</p>
+        </div>
+        <div class="header-actions">
+          <span class="model-tag" id="current-model-tag">Nemotron 3.5</span>
+          <span class="badge badge-success">0 Cost (Free Tier)</span>
+        </div>
+      </header>
+
+      <!-- MESSAGES SCROLL AREA -->
+      <div id="chat-messages" class="chat-messages">
+        <!-- WELCOME BANNER -->
+        <div id="welcome-banner" class="welcome-banner">
+          <div class="welcome-icon">🎓</div>
+          <h3>Welcome to your Research Outreach Assistant</h3>
+          <p>
+            I search top university faculty in the <strong>US, Singapore, and Hong Kong</strong> matching your research interests, 
+            deduce or scrape their contact emails, and generate <strong>interactive cold email drafts</strong> with your attached resumes.
+          </p>
+          
+          <div class="prompt-suggestions">
+            <div class="suggestion-card" data-prompt="Find university professors in the US working on 3D computer vision and generative diffusion models, and craft personalized cold emails for research positions.">
+              <span class="card-icon">👁️</span>
+              <div class="card-content">
+                <strong>US Computer Vision & Diffusion Models</strong>
+                <span>Find top faculty at Stanford, Berkeley, CMU & generate drafts</span>
+              </div>
+            </div>
+
+            <div class="suggestion-card" data-prompt="Search for professors in Singapore (NUS, NTU) and Hong Kong (HKUST, HKU) working on Natural Language Processing, LLM reasoning, and Agentic AI. Create cold email drafts for us.">
+              <span class="card-icon">🌏</span>
+              <div class="card-content">
+                <strong>Singapore & Hong Kong NLP / Agents</strong>
+                <span>Search NUS, NTU, HKUST faculty and generate cold emails</span>
+              </div>
+            </div>
+
+            <div class="suggestion-card" data-prompt="Find robotics and embodied AI research labs in top US universities like Stanford, CMU, and MIT, and draft collaborative inquiry emails with our resumes.">
+              <span class="card-icon">🤖</span>
+              <div class="card-content">
+                <strong>Robotics & Embodied AI Labs</strong>
+                <span>Discover professors in manipulation, RL & embodied intelligence</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM INPUT BAR -->
+      <footer class="chat-footer">
+        <div class="input-wrapper">
+          <button id="input-attach-btn" class="input-action-btn" title="Upload Resume / Attachment">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" id="chat-file-input" accept=".pdf,.doc,.docx" class="hidden">
+          </button>
+
+          <textarea id="chat-input" placeholder="Tell the agent what research topics and regions to explore (e.g. 'Find US faculty in generative AI and draft emails')..." rows="1"></textarea>
+
+          <button id="send-btn" class="send-btn" title="Send instruction (Enter)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+
+          <button id="stop-btn" class="stop-btn hidden" title="Stop generation">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+          </button>
+        </div>
+        <div class="input-hint">
+          Press <strong>Enter</strong> to send, <strong>Shift + Enter</strong> for a new line • All email sending requires your manual 1-click review
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- CONFIRMATION MODAL -->
+  <div id="confirm-modal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <h3 id="modal-title">Confirm Email Dispatch</h3>
+      <p id="modal-desc">Are you sure you want to send this cold email?</p>
+      <div id="modal-details" class="modal-details"></div>
+      <div class="modal-actions">
+        <button id="modal-cancel-btn" class="btn btn-secondary">Cancel</button>
+        <button id="modal-confirm-btn" class="btn btn-primary">Send Email</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
