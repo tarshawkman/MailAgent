@@ -8,7 +8,7 @@ AI-powered tool to **find professors**, **generate personalised cold emails**, a
 
 ---
 
-## ✨ Features
+## Features
 
 | Feature | How it works |
 |---|---|
@@ -20,7 +20,7 @@ AI-powered tool to **find professors**, **generate personalised cold emails**, a
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Clone & install
 
@@ -64,7 +64,7 @@ Open **http://127.0.0.1:5000** in your browser.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 research-outreach-agent/
@@ -106,7 +106,7 @@ SMTP_PASSWORD=abcd efgh ijkl mnop
 
 ---
 
-## 💰 Cost
+## Cost
 
 **$0.** Everything uses free tiers:
 
